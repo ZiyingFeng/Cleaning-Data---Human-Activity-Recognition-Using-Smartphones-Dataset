@@ -10,7 +10,7 @@ data <- rbind(test_set, train_set)
 # 2. Extracts only the measurements on the mean and standard deviation for each measurement, and store the data set into data2.
 feature <- read.table("features.txt", header = FALSE, stringsAsFactors = FALSE)
 feature_mean_std <- grep("mean|std", feature[,2])
-data1 <- data[,feature_mean_std]
+data2 <- data[,feature_mean_std]
 
 # 3. Uses descriptive activity names to name the activities in the data set.
 # 4. Appropriately labels the data set with descriptive variable names.
