@@ -53,7 +53,7 @@ name <- names(data3)
 # 5. From the data set in step 4, creates a second, independent tidy data set with the average of each variable for each activity and each subject.
 tidy_data_set <- aggregate(data3[,3:ncol(data3)], by = data3[,1:2], FUN = mean)
 write.table(tidy_data_set, file = "tidy_data_set.txt", row.names = FALSE)
-
+write.csv(tidy_data_set, file = "tidy_data_set.csv", row.names = FALSE)
 
 
 
