@@ -1,4 +1,5 @@
 # coursera-getting-cleaning-data-project
+
 ## run_analysis.R
 <p> The R script of the project accomplishing the following goals: </p>
 <p> 1. Merges the training and the test sets to create one data set. </p>
@@ -9,5 +10,6 @@
 
 ## CodeBook.md
 <p> Describe the variables in the R script. </p>
+
 ## tidy_data_set.csv and tidy_data_set.txt
 <p> The tidy data set that accomplishes the goals described above. </p>
