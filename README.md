@@ -6,6 +6,7 @@
 <p> 3. Uses descriptive activity names to name the activities in the data set. </p>
 <p> 4. Appropriately labels the data set with descriptive variable names. </p>
 <p> 5. From the data set in step 4, creates a second, independent tidy data set with the average of each variable for each activity and each subject. </p>
+
 ## CodeBook.md
 <p> Describe the variables in the R script. </p>
 ## tidy_data_set.csv and tidy_data_set.txt
