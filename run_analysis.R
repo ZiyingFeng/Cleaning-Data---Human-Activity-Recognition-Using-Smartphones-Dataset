@@ -12,30 +12,48 @@ feature <- read.table("features.txt", header = FALSE, stringsAsFactors = FALSE)
 feature_mean_std <- grep("mean|std", feature[,2])
 data2 <- data[,feature_mean_std]
 
-# 3. Uses descriptive activity names to name the activities in the data set.
-# 4. Appropriately labels the data set with descriptive variable names.
-# Read the activity labels into activity_label_test, activity_label_train, and parse the number in the label according to the label descriptions in activity_labels.txt
-# And turn them into factors
-activity_label_test <- read.table("./test/y_test.txt", header = FALSE, stringsAsFactors = FALSE)
-activity_label_train <- read.table("./train/y_train.txt", header = FALSE, stringsAsFactors = FALSE)
-activity_label_test_des <- factor(activity_label_test[,1],labels=c("WALKING", "WALKING_UPSTAIRS", "WALKING_DOWNSTAIRS", "SITTING", "STANDING", "LAYING"))
-activity_label_train_des <- factor(activity_label_train[,1],labels=c("WALKING", "WALKING_UPSTAIRS", "WALKING_DOWNSTAIRS", "SITTING", "STANDING", "LAYING"))
-# To bind the descriptive labels they need to be the same column name
-activity_label_test_des <- as.data.frame(activity_label_test_des)
-activity_label_train_des <- as.data.frame(activity_label_train_des)
-names(activity_label_train_des) <- "V1"
-names(activity_label_test_des) <- "V1"
-activity_label_des <- rbind(activity_label_test_des, activity_label_train_des)
+
 # Label the data set with variable names (from the feature) (column names)
 names(data) <- feature[,2]
 data2 <- data[,feature_mean_std] # regenerate data2 (this one with variable names)
-# Add the descriptive activity names to the first column (row names), and store the data in data3
-data3 <- cbind(activity_label_des[,1], data2)
+
+# Read and bind the test subject and the train subject
+subject_test <- read.table("./test/subject_test.txt", header = FALSE, stringsAsFactors = FALSE)
+subject_train <- read.table("./train/subject_train.txt", header = FALSE, stringsAsFactors = FALSE)
+subject <- rbind(subject_test, subject_train)
+
+# Read and bind the test labels and the train labels
+activity_label_test <- read.table("./test/y_test.txt", header = FALSE, stringsAsFactors = FALSE)
+activity_label_train <- read.table("./train/y_train.txt", header = FALSE, stringsAsFactors = FALSE)
+activity <- rbind(activity_label_test, activity_label_train)
+#activity_label_test_des <- factor(activity_label_test[,1],labels=c("WALKING", "WALKING_UPSTAIRS", "WALKING_DOWNSTAIRS", "SITTING", "STANDING", "LAYING"))
+#activity_label_train_des <- factor(activity_label_train[,1],labels=c("WALKING", "WALKING_UPSTAIRS", "WALKING_DOWNSTAIRS", "SITTING", "STANDING", "LAYING"))
+
+# Bind the subject column and the activity column to the data2, and store it in data3
+data3 <- cbind(subject, data2)
+data3 <- cbind(activity, data3)
+names(data3)[1] <- "activity"
+names(data3)[2] <- "subject"
+
+
+# 3. Uses descriptive activity names to name the activities in the data set.
+# Convert the label number into the descriptive label
+activity_labels <- read.table("./activity_labels.txt", header = FALSE, stringsAsFactors = FALSE)
+data3$activity <- activity_labels[data3$activity, 2]
+
+# 4. Appropriately labels the data set with descriptive variable names.
+name <- names(data3)
+name <- gsub("^t", "time", name)
+name <- gsub("^f", "freq", name)
+name <- gsub("\\(\\)", "", name)
+# \\(\\) escape brackets
+name <- names(data3) 
+
 
 # 5. From the data set in step 4, creates a second, independent tidy data set with the average of each variable for each activity and each subject.
-data4 <- split(data3, data3[,1])
-tidy_data_set <- sapply(data4, function(x) colMeans(x[,2:80]))
-# split the data according the activity factors, then apply the colMeans to each group
+tidy_data_set <- aggregate(data3[,3:ncol(data3)], by = data3[,1:2], FUN = mean)
+write.table(tidy_data_set, file = "tidy_data_set.txt", row.names = FALSE)
+
 
 
 
